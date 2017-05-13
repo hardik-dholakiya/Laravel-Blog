@@ -48,8 +48,7 @@
                             <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                                 <label for="description" class="col-md-3 control-label">Post Description</label>
                                 <div class="col-md-8">
-
-                                    <textarea id="description" rows="9" class="form-control description"
+                                    <textarea id="description" class="form-control description"
                                               name="description">{{ old('description') }}</textarea>
                                     @if ($errors->has('description'))
                                         <div class="alert alert-danger" style=" margin-bottom: 1px;padding: 5px;">

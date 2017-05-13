@@ -155,7 +155,7 @@
                    @else
                     <div align="center">
                         <h3>
-                            <strong> ' {{$search_text}} '</strong> post not found
+                            <strong> '{{$search_text}}'</strong> post not found
                         </h3>
                     </div>
                 @endif
