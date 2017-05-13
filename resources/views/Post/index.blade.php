@@ -248,7 +248,7 @@
                     "</form></div>",
                     title: "<h4>Reply</h4>",
                     html: true,
-                    placement: "left"
+                    placement: "bottom"
                 });
         });
     </script>
