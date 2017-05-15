@@ -22,11 +22,13 @@
                         </div>
                         @if(Auth::user()->id==$post_detail['user_id'] || Auth::user()->role==1 )
                             <div align="right">
-                                <a href="{{ url('/show',$post_detail['post_id'])}}" class="btn btn-info">
+                                <a href="{{ url('/show',$post_detail['post_id'])}}" class="btn btn-info"
+                                   title="Edit Post">
                                     <span class="glyphicon glyphicon-edit"></span>
                                     Edit
                                 </a>
-                                <a href="{{ url('/deletePost',$post_detail['post_id'])}}" class="btn btn-info">
+                                <a href="{{ url('/deletePost',$post_detail['post_id'])}}" class="btn btn-info"
+                                   title="Delete Post">
                                     <span class="glyphicon glyphicon-trash"></span>
                                     Delete
                                 </a>
@@ -35,13 +37,12 @@
                         <div class="row">
                             @if($post_detail['image_path']!=null)
                                 <div class="col-md-3">
-
                                     <img src="{{asset($post_detail['image_path'])}}"
                                          onerror="this.src='{{asset('image/no-image-icon.jpg')}}'" width="250px"
                                          height="200px">
                                 </div>
                                 <div class="col-md-8">
-                                    {!! ucfirst($post_detail['description'])!!}
+                                    {!! ucfirst($post_detail['description']) !!}
                                 </div>
                             @else
                                 <div class="col-lg-offset-1">
@@ -51,13 +52,21 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-md-1 col-md-offset-3">
-                                <button href="javascript:void(0)" class="btn btn-default like" id="like"
-                                        name="like"
-                                        data-post-id="{{$post_detail['post_id']}}" data-toggle="tooltip"
-                                        data-placement="bottom">{{count($post_detail['Likes'])}} |
-                                    <span class="glyphicon glyphicon-thumbs-up"></span> Like
-                                </button>
+                            <div class="col-md-2 col-md-offset-3">
+                                <strong>
+                                    Post by
+                                    {{$post_detail['user']->name}}
+                                </strong>
+                            </div>
+                            <div class="col-md-2" style="width: 95px;margin-left: -70px;">
+                                <a href="javascript:void(0)" class="btn btn-default like" id="like" name="like"
+                                   data-post-id="{{$post_detail['post_id']}}" data-toggle="tooltip"
+                                   data-placement="bottom">
+                                    <b>
+                                        {{count($post_detail['Likes'])}} |
+                                    </b>
+                                    <img src="{{asset('image/like-flat.png')}}" height="20px">
+                                </a>
                                 <form id="like-form-{{$post_detail['post_id']}}" class="like-form"
                                       action="{{ route('like') }}" method="POST"
                                       style="display: none;">
@@ -66,44 +75,14 @@
                                 </form>
                             </div>
 
-                            <div class="col-md-5 ">
+                            <div class="col-md-5" style="margin-left: -30px;">
                                 <a class="btn btn-default" href="javascript:void(0)" data-toggle="modal"
-                                   data-target="#CommentModal{{$post_detail['post_id']}}">
-                                    <span class="glyphicon glyphicon-comment"></span>
-                                    Comment
+                                   data-target="#CommentModal{{$post_detail['post_id']}}" title="Comment">
+                                    <b>
+                                        {{count($post_detail['Comments'])}} |
+                                    </b>
+                                    <img src="{{asset('image/comment.png')}}" height="22px">
                                 </a>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="CommentModal{{$post_detail['post_id']}}"
-                                     role="dialog">
-                                    <div class="modal-dialog modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close"
-                                                    data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Comment</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form name="comment_form" action="{{route('storeComment')}}"
-                                                  method="post">
-                                                {{ csrf_field() }}
-                                                <input type="hidden" name="post_id"
-                                                       value="{{$post_detail['post_id']}}">
-                                                <input type="hidden" name="user_id"
-                                                       value="{{Auth::user()->id}}">
-                                                <textarea name="comment_text" rows="5" cols="85"
-                                                          required></textarea>
-                                                <hr>
-                                                <input class="btn btn-info" type="submit"
-                                                       name="comment_submit"
-                                                       value="Post Comment">
-                                                <button type="button" class="btn btn-info"
-                                                        data-dismiss="modal">
-                                                    Close
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div> <!--End Modal-->
 
                             </div>
                             <div class="col-md-2">
@@ -111,35 +90,92 @@
                                 {{$post_detail['created_at']->format('d/m/y  h:i:s')}}
                             </div>
                         </div>
-                        <div style="margin: 10px 0px 10px 50px;">
-                            @foreach($post_detail['comments'] as $comment_id=>$comment_detail)
-                                @if($comment_detail['is_comment']==1)
-                                    <img src="{{asset($comment_detail->user->image)}}"
-                                         onerror="this.src='{{asset('image/user-icon.png')}}'"
-                                         height="30px">
+                        <!-- Modal -->
+                        <div class="modal fade" id="CommentModal{{$post_detail['post_id']}}"
+                             role="dialog">
+                            <div class="modal-dialog modal-content" style=" width: 80%;">
+                                <div class="modal-header">
+                                    <button type="button" class="close"
+                                            data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Comment</h4>
+                                </div>
+                                <div class="modal-body">
 
-                                    {{$comment_detail->user['name']." : "}}
-                                    {{$comment_detail["comment_text"]}}
-                                    <a href="javascript:void(0)" class="comment_reply"
-                                       id="click{{$comment_detail["comment_id"]}}"
-                                       data-comment-id="{{$comment_detail["comment_id"]}}"
-                                       data-post-id="{{$post_detail['post_id']}}">
-                                        Reply
-                                    </a>
-                                    <br/>
+                                    <div style="margin: 10px 0px 10px 50px;">
+                                        <ul class="comment-section">
+                                            @foreach($post_detail['comments'] as $comment_id=>$comment_detail)
+                                                @if($comment_detail['is_comment']==1)
+                                                    {{--Comment--}}
+                                                    <li class="comment user-comment">
+                                                        <div class="info">
+                                                            <a href="{{url('show-user-profile/'.$comment_detail->user->id)}}">{{$comment_detail->user['name']}}</a>
+                                                            <span>{{time_ago($comment_detail['created_at'])}}</span>
+                                                        </div>
+                                                        <a class="avatar"
+                                                           href="{{url('show-user-profile/'.$comment_detail->user->id)}}">
+                                                            <img src="{{asset($comment_detail->user->image)}}"
+                                                                 onerror="this.src='{{asset('image/user-icon.png')}}'"
+                                                                 height="30px" title="{{$comment_detail->user->name}}" width="35"
+                                                                 alt="Profile Avatar"/>
+                                                        </a>
+                                                        <p>{{$comment_detail["comment_text"]}}
+                                                            <br/>
+                                                            <label class="reply-link">
+                                                                <a href="javascript:void(0)"
+                                                                   class="btn btn-default btn-sm comment_reply"
+                                                                   id="click{{$comment_detail["comment_id"]}}"
+                                                                   data-comment-id="{{$comment_detail["comment_id"]}}"
+                                                                   data-post-id="{{$post_detail['post_id']}}">
+                                                                    <i class="fa fa-reply"></i> Reply
+                                                                </a>
+                                                            </label>
+                                                        </p>
+                                                    </li>
+                                                    {{--end comment --}}
+                                                @endif
+                                                @foreach($comment_detail['reply'] as $reply=>$reply_detail)
+                                                    <li class="comment user-comment" style="margin-left: 135px;">
+                                                        <div class="info">
+                                                            <a href="{{url('show-user-profile/'.$reply_detail->user->id)}}">{{ $reply_detail->user->name }}</a>
+                                                            <span>{{time_ago($reply_detail['created_at'])}}</span>
+                                                        </div>
 
-                                @endif
-                                @foreach($comment_detail['reply'] as $reply=>$reply_detail)
-                                    <div style="margin: 5px 0px 5px 60px;">
-                                        <img src="{{asset($reply_detail->user->image)}}"
-                                             onerror="this.src='{{asset('image/user-icon.png')}}'"
-                                             height="30px">
-                                        {{ $reply_detail->user->name." : " }}
-                                        {{ $reply_detail["comment_text"] }}
+                                                        <a class="avatar"
+                                                           href="{{url('show-user-profile/'.$reply_detail->user->id)}}">
+                                                            <img src="{{asset($reply_detail->user->image)}}"
+                                                                 onerror="this.src='{{asset('image/user-icon.png')}}'"
+                                                                 title="{{$reply_detail->user->name}}"
+                                                                 width="35" alt="{{ $reply_detail->user->name }}"/>
+                                                        </a>
+                                                        <p style="background-color: #e2f8ff;">{{ $reply_detail["comment_text"] }}</p>
+                                                    </li>
+                                                @endforeach
+                                            @endforeach
+                                            <li class="write-new">
+                                                <h4>Comment</h4>
+                                                <form name="comment_form" action="{{route('storeComment')}}"
+                                                      method="post">
+                                                    {{ csrf_field() }}
+                                                    <input type="hidden" name="post_id"
+                                                           value="{{$post_detail['post_id']}}">
+                                                    <input type="hidden" name="user_id"
+                                                           value="{{Auth::user()->id}}">
+                                                    <textarea name="comment_text" rows="5" cols="85"
+                                                              required placeholder="Write your comment here"></textarea>
+                                                    <div>
+                                                        <img src="{{asset(Auth::user()->image)}}" width="35"
+                                                             alt="Profile of Bradley Jones" title="Bradley Jones"/>
+                                                        <button  name="comment_submit"
+                                                                 type="submit">Post Comment</button>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </div>
-                                @endforeach
-                            @endforeach
-                        </div>
+                                </div>
+                            </div>
+                        </div> <!--End Modal-->
+
                     </div>
                     <hr>
                 @endforeach
@@ -153,20 +189,18 @@
         $(document).on('click', '.comment_reply', function (e) {
             $('.comment_reply').not(this).popover('hide');
             $(this).popover(
-                {
-
-                    content: "<div><form action='{{route('storeReply')}}' method='post'>" + '{{ csrf_field() }}' +
-                    "<textarea name='reply_text' required cols='38' rows='6'></textarea>" +
-                    "<input type='hidden' readonly name='user_id' value='{{Auth::user()->id}}'>" +
-                    "<input type='hidden' readonly name='post_id' value='" + $(this).data('post-id') + "'>" +
-                    "<input type='hidden' readonly name='comment_id' value='" + $(this).data('comment-id') + "'>" +
-                    "<hr>" +
-                    "<button class='btn btn-default' type='submit' name='submit_reply'> Save Reply</button> &nbsp;&nbsp;" +
-                    "<input type='button' onclick='$(this).parent().parent().parent().parent().hide();' value='close' class='btn btn-default'></button>" +
-                    "</form></div>",
+                {   content: "<div><form action='{{route('storeReply')}}' method='post'>" + '{{ csrf_field() }}' +
+                "<textarea name='reply_text' required cols='38' rows='6'></textarea>" +
+                "<input type='hidden' readonly name='user_id' value='{{Auth::user()->id}}'>" +
+                "<input type='hidden' readonly name='post_id' value='" + $(this).data('post-id') + "'>" +
+                "<input type='hidden' readonly name='comment_id' value='" + $(this).data('comment-id') + "'>" +
+                "<hr>" +
+                "<button class='btn btn-default' type='submit' name='submit_reply'> Save Reply</button> &nbsp;&nbsp;" +
+                "<input type='button' onclick='$(this).parent().parent().parent().parent().hide();' value='close' class='btn btn-default'></button>" +
+                "</form></div>",
                     title: "<h4>Reply</h4>",
                     html: true,
-                    placement: "right"
+                    placement: "left"
                 });
         });
     </script>
@@ -192,17 +226,13 @@
                     },
                     dataType: "json",
                     success: function (data) {
-                        if (Object.keys(data).length > 0) {
-                            name = Object.values(data);
-                        }
-                        else
-                            name = "Any one no Like.";
+                        name = Object.values(data);
                         $this.attr('title', name)
                             .tooltip('fixTitle')
                             .tooltip('show');
                     },
                     error: function (data) {
-                        alert("error");
+                        console.log("error");
                     }
                 });
                 return false;
@@ -216,3 +246,34 @@
         });
     </script>
 @endsection
+<?php
+function time_ago($datetime, $full = false) {
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
+}
+
+?>

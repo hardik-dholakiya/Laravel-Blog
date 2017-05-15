@@ -38,7 +38,7 @@
                         <div class="row">
                             @if($post_detail['image_path']!=null)
                                 <div class="col-md-3">
-                                    <img src="{{$post_detail['image_path']}}"
+                                    <img src="{{asset($post_detail['image_path'])}}"
                                          onerror="this.src='{{asset('image/no-image-icon.jpg')}}'" width="250px"
                                          height="200px">
                                 </div>
