@@ -36,6 +36,190 @@
             color: #3c4245;
             border: 1px solid #303030;
         }
+
+        /*comment reply*/
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .comment-section{
+            list-style: none;
+            max-width: 1000px;
+            width: 100%;
+            margin: 50px auto;
+            padding: 10px;
+            font: normal 13px sans-serif;
+        }
+
+        .comment{
+            display: flex;
+            border-radius: 3px;
+            flex-wrap: wrap;
+        }
+
+        .comment.user-comment{
+            color:  #808080;
+        }
+        /* User and time info */
+
+        .comment.user-comment .info{
+            text-align: right;
+        }
+
+        .comment .info a{   /* User name */
+            display: block;
+            text-decoration: none;
+            color: #656c71;
+            font-weight: bold;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0 3px 0;
+        }
+
+        .comment .info span{    /* Time */
+            font-size: 11px;
+            color:  #9ca7af;
+        }
+
+
+        /* The user avatar */
+        .comment.user-comment .avatar{
+            padding: 10px 10px 0 3px;
+        }
+        .comment .avatar img{
+            border-radius: 50px;
+        }
+        /* The comment text */
+        .comment p{
+            line-height: 1.5;
+            padding: 18px 22px;
+            width: 80%;
+            border-radius:20px;
+            position: relative;
+            word-wrap: break-word;
+        }
+        .comment.user-comment p{
+            background-color:  #f3f3f3;
+        }
+        .user-comment p:after{
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            border: 2px solid #f3f3f3;
+            left: -8px;
+            top: 18px;
+        }
+        .reply-link{
+            margin-left: 90%;
+        }
+
+        /* Comment form */
+
+        .write-new{
+            margin: 20px auto;
+            width: 70%;
+        }
+
+        .write-new textarea{
+            color:  #444;
+            font: inherit;
+
+            outline: 0;
+            border-radius: 3px;
+            border: 1px solid #cecece;
+            background-color:  #fefefe;
+            box-shadow: 1px 2px 1px 0 rgba(0, 0, 0, 0.06);
+            overflow: auto;
+
+            width:100%;
+            min-height: 80px;
+            padding: 15px 20px;
+        }
+
+        .write-new img{
+            border-radius: 50%;
+            margin-top: 15px;
+        }
+
+        .write-new button{
+            float:right;
+            background-color:  #87bae1;
+            box-shadow: 1px 2px 1px 0 rgba(0, 0, 0, 0.12);
+            border-radius: 2px;
+            border: 0;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+
+            padding: 10px 25px;
+            margin-top: 18px;
+        }
+
+
+
+        /* Responsive styles */
+
+        @media (max-width: 800px){
+            /* Make the paragraph in the comments take up the whole width,
+            forcing the avatar and user info to wrap to the next line*/
+            .comment p{
+                width: 100%;
+            }
+
+            /* Reverse the order of elements in the user comments,
+            so that the avatar and info appear after the text. */
+            .comment.user-comment .info{
+                order: 3;
+                text-align: left;
+            }
+
+            .comment.user-comment .avatar{
+                order: 2;
+            }
+
+            .comment.user-comment p{
+                order: 1;
+            }
+
+
+            .comment-section{
+                margin-top: 10px;
+            }
+
+            .comment .info{
+                width: auto;
+            }
+
+            .comment .info a{
+                padding-top: 15px;
+            }
+
+            .comment.user-comment .avatar{
+                padding: 15px 10px 0 18px;
+                width: auto;
+            }
+
+            .comment.user-comment p:after{
+                width: 12px;
+                height: 12px;
+                top: initial;
+                left: 28px;
+                bottom: -6px;
+            }
+
+            .write-new{
+                width: 100%;
+            }
+        }
+
+        /* end comment reply*/
+
     </style>
     <!-- Scripts -->
     <script>
