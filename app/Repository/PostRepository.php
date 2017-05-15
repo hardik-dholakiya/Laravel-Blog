@@ -22,7 +22,6 @@ class PostRepository implements PostRepositoryInterface
             $post = Post::with(array('user','likes','comments', 'comments.user', 'comments.reply', 'comments.reply.user'))->orderBy('title')->paginate(5);
         else
             $post = Post::with(array('user','likes','comments', 'comments.user', 'comments.reply', 'comments.reply.user'))->where('user_id', $user->id)->OrWhere('publish', 1)->orderBy('title')->paginate(5);
-//        dd($post);
         return $post;
 
     }

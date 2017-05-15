@@ -63,12 +63,15 @@
                         </div>
                         <div class="row">
                             <div class="col-md-2 col-md-offset-3">
+                                <span class="glyphicon glyphicon-user"></span>
                                 <strong>
                                     Post by
-                                    {{$post_detail['user']->name}}
+                                    <a href="{{url('show-user-profile/'.$post_detail['user']->id)}}">
+                                        {{$post_detail['user']->name}}
+                                    </a>
                                 </strong>
                             </div>
-                            <div class="col-md-2" style="width: 95px;margin-left: -70px;">
+                            <div class="col-md-1">
                                 <a href="javascript:void(0)" class="btn btn-default like" id="like" name="like"
                                    data-post-id="{{$post_detail['post_id']}}" data-toggle="tooltip"
                                    data-placement="bottom">
@@ -85,19 +88,19 @@
                                 </form>
                             </div>
 
-                            <div class="col-md-5" style="margin-left: -30px;">
+                            <div class="col-md-4 comment-link">
                                 <a class="btn btn-default" href="javascript:void(0)" data-toggle="modal"
                                    data-target="#CommentModal{{$post_detail['post_id']}}" title="Comment">
                                     <b>
                                         {{count($post_detail['Comments'])}} |
                                     </b>
-                                    <img src="{{asset('image/comment.png')}}" height="22px">
+                                    <img src="{{asset('image/comment.png')}}">
                                 </a>
 
                             </div>
                             <div class="col-md-2">
                                 <span class="glyphicon glyphicon-calendar"></span>
-                                {{$post_detail['created_at']->format('d/m/y  h:i:s')}}
+                                {{ time_ago($post_detail['created_at'])}}
                             </div>
                         </div>
                         <!-- Modal -->
@@ -111,111 +114,127 @@
                                 </div>
                                 <div class="modal-body">
 
-                        <div style="margin: 10px 0px 10px 50px;">
-                            <ul class="comment-section">
-                                @foreach($post_detail['comments'] as $comment_id=>$comment_detail)
-                                    @if($comment_detail['is_comment']==1)
-                                        {{--Comment--}}
-                                        <li class="comment user-comment">
-                                            <div class="info">
-                                                <a href="{{url('show-user-profile/'.$comment_detail->user->id)}}">{{$comment_detail->user['name']}}</a>
-                                                <span>{{time_ago($comment_detail['created_at'])}}</span>
-                                            </div>
-                                            <a class="avatar"
-                                               href="{{url('show-user-profile/'.$comment_detail->user->id)}}">
-                                                <img src="{{asset($comment_detail->user->image)}}"
-                                                     onerror="this.src='{{asset('image/user-icon.png')}}'"
-                                                     height="30px" title="{{$comment_detail->user->name}}" width="35"
-                                                     alt="Profile Avatar"/>
-                                            </a>
-                                            <p>{{$comment_detail["comment_text"]}}
-                                                <label class="reply-link">
-                                                    <a href="javascript:void(0)"
-                                                       class="btn btn-default btn-sm comment_reply"
-                                                       id="click{{$comment_detail["comment_id"]}}"
-                                                       data-comment-id="{{$comment_detail["comment_id"]}}"
-                                                       data-post-id="{{$post_detail['post_id']}}">
-                                                        <i class="fa fa-reply"></i> Reply
-                                                    </a>
-                                                </label>
-                                            </p>
-                                        </li>
-                                        {{--end comment --}}
-                                    @endif
-                                    @foreach($comment_detail['reply'] as $reply=>$reply_detail)
-                                        <li class="comment user-comment" style="margin-left: 135px;">
-                                            <div class="info">
-                                                <a href="{{url('show-user-profile/'.$reply_detail->user->id)}}">{{ $reply_detail->user->name }}</a>
-                                                <span>{{time_ago($reply_detail['created_at'])}}</span>
-                                            </div>
+                                    <div style="margin: 10px 0px 10px 50px;">
+                                        <ul class="comment-section">
+                                            @foreach($post_detail['comments'] as $comment_id=>$comment_detail)
+                                                @if($comment_detail['is_comment']==1)
+                                                    {{--Comment--}}
+                                                    <li class="comment user-comment">
+                                                        <div class="info">
+                                                            <a href="{{url('show-user-profile/'.$comment_detail->user->id)}}">{{$comment_detail->user['name']}}</a>
+                                                            <span>{{time_ago($comment_detail['created_at'])}}</span>
+                                                        </div>
+                                                        <a class="avatar"
+                                                           href="{{url('show-user-profile/'.$comment_detail->user->id)}}">
+                                                            <img src="{{asset($comment_detail->user->image)}}"
+                                                                 onerror="this.src='{{asset('image/user-icon.png')}}'"
+                                                                 height="30px" title="{{$comment_detail->user->name}}"
+                                                                 width="35"
+                                                                 alt="Profile Avatar"/>
+                                                        </a>
+                                                        <p>{!! $comment_detail["comment_text"] !!}
+                                                            <label class="reply-link">
+                                                                <a href="javascript:void(0)"
+                                                                   data-toggle="collapse"
+                                                                   id="reply"
+                                                                   data-target="#reply-{{$comment_detail["comment_id"]}}"
+                                                                   class="btn btn-default btn-sm reply">
+                                                                    <i class="fa fa-reply"></i> Reply
+                                                                </a>
+                                                            </label>
+                                                        </p>
+                                                        <div id="reply-{{$comment_detail["comment_id"]}}"
+                                                             class="collapse container reply-block" align="center">
+                                                            <div class="panel panel-info">
+                                                                <div class="panel-heading">Reply</div>
+                                                                <div class="panel-body">
+                                                                    <form action='{{route('storeReply')}}'
+                                                                          method='post'>
+                                                                        {{ csrf_field() }}
+                                                                        <textarea name='reply_text' required cols='90'
+                                                                                  rows='5'></textarea>
+                                                                        <input type='hidden' readonly name='user_id'
+                                                                               value='{{Auth::user()->id}}'>
+                                                                        <input type='hidden' readonly name='post_id'
+                                                                               value='{{$post_detail['post_id']}}'>
+                                                                        <input type='hidden' readonly name='comment_id'
+                                                                               value='{{$comment_detail["comment_id"]}}'>
+                                                                        <button class='btn btn-default' type='submit'
+                                                                                style="margin-top: -35px;"
+                                                                                name='submit_reply'> Save Reply
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    {{--end comment --}}
+                                                @endif
+                                                @foreach($comment_detail['reply'] as $reply=>$reply_detail)
+                                                    <li class="comment user-comment" style="margin-left: 135px;">
+                                                        <div class="info">
+                                                            <a href="{{url('show-user-profile/'.$reply_detail->user->id)}}">{{ $reply_detail->user->name }}</a>
+                                                            <span>{{time_ago($reply_detail['created_at'])}}</span>
+                                                        </div>
 
-                                            <a class="avatar"
-                                               href="{{url('show-user-profile/'.$reply_detail->user->id)}}">
-                                                <img src="{{asset($reply_detail->user->image)}}"
-                                                     onerror="this.src='{{asset('image/user-icon.png')}}'"
-                                                     title="{{$reply_detail->user->name}}"
-                                                     width="35" alt="{{ $reply_detail->user->name }}"/>
-                                            </a>
-                                            <p style="background-color: #e2f8ff;">{{ $reply_detail["comment_text"] }}</p>
-                                        </li>
-                                    @endforeach
-                                @endforeach
-                                <li class="write-new">
-                                    <h4>Comment</h4>
-                                    <form name="comment_form" action="{{route('storeComment')}}"
-                                          method="post">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="post_id"
-                                               value="{{$post_detail['post_id']}}">
-                                        <input type="hidden" name="user_id"
-                                               value="{{Auth::user()->id}}">
-                                        <textarea name="comment_text" rows="5" cols="85"
-                                                  required placeholder="Write your comment here"></textarea>
-                                        <div>
-                                            <img src="{{asset(Auth::user()->image)}}" width="35"
-                                                 alt="Profile of Bradley Jones" title="Bradley Jones"/>
-                                            <button  name="comment_submit"
-                                                     type="submit">Post Comment</button>
-                                        </div>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                                                        <a class="avatar"
+                                                           href="{{url('show-user-profile/'.$reply_detail->user->id)}}">
+                                                            <img src="{{asset($reply_detail->user->image)}}"
+                                                                 onerror="this.src='{{asset('image/user-icon.png')}}'"
+                                                                 title="{{$reply_detail->user->name}}"
+                                                                 width="35" alt="{{ $reply_detail->user->name }}"/>
+                                                        </a>
+                                                        <p style="background-color: #e2f8ff;">{{ $reply_detail["comment_text"] }}</p>
+                                                    </li>
+                                                @endforeach
+                                            @endforeach
+                                            <li class="write-new">
+                                                <h4>Comment</h4>
+                                                <form name="comment_form" action="{{route('storeComment')}}"
+                                                      method="post">
+                                                    {{ csrf_field() }}
+                                                    <input type="hidden" name="post_id"
+                                                           value="{{$post_detail['post_id']}}">
+                                                    <input type="hidden" name="user_id"
+                                                           value="{{Auth::user()->id}}">
+                                                    <textarea name="comment_text" rows="5" cols="85"
+                                                              required placeholder="Write your comment here"></textarea>
+                                                    <div>
+                                                        <img src="{{asset(Auth::user()->image)}}" width="35"
+                                                             alt="Profile of Bradley Jones" title="Bradley Jones"/>
+                                                        <button name="comment_submit"
+                                                                type="submit">Post Comment
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div> <!--End Modal-->
-
                     </div>
                     <hr>
                 @endforeach
                 <div align="center">
-                    {{$post->links()}}
+                    <ul class="pager">
+                        <li><a href="{{url('home?page=1')}}">
+                                First</a>
+                        </li>
+                        <li><a href="{{$post->previousPageUrl()}}">Previous</a></li>
+                        <li><a href="{{$post->nextPageUrl()}}">Next</a></li>
+                        <li><a href="{{url('home?page='.$post->lastPage())}}">
+                                Last</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        $(document).on('click', '.comment_reply', function (e) {
-            $('.comment_reply').not(this).popover('hide');
-            $(this).popover(
-                {   content: "<div><form action='{{route('storeReply')}}' method='post'>" + '{{ csrf_field() }}' +
-                    "<textarea name='reply_text' required cols='38' rows='6'></textarea>" +
-                    "<input type='hidden' readonly name='user_id' value='{{Auth::user()->id}}'>" +
-                    "<input type='hidden' readonly name='post_id' value='" + $(this).data('post-id') + "'>" +
-                    "<input type='hidden' readonly name='comment_id' value='" + $(this).data('comment-id') + "'>" +
-                    "<hr>" +
-                    "<button class='btn btn-default' type='submit' name='submit_reply'> Save Reply</button> &nbsp;&nbsp;" +
-                    "<input type='button' onclick='$(this).parent().parent().parent().parent().hide();' value='close' class='btn btn-default'></button>" +
-                    "</form></div>",
-                    title: "<h4>Reply</h4>",
-                    html: true,
-                    placement: "left"
-                });
-        });
-    </script>
 @endsection
 @section('head-include')
     <script type="text/javascript">
+
         $(document).ready(function () {
             $.ajaxSetup(
                 {
@@ -265,7 +284,8 @@ function limit_text($text, $limit)
     }
     return $text;
 }
-function time_ago($datetime, $full = false) {
+function time_ago($datetime, $full = false)
+{
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);

@@ -34,9 +34,16 @@
         .btn{
             background-color: white;
             color: #3c4245;
+            border-radius: 0px;
             border: 1px solid #303030;
         }
-        *comment reply*/
+        .comment-link{
+            margin-left: -20px;
+        }
+        .comment-link img{
+            height: 20px;
+        }
+        /**comment reply*/
         *{
             margin: 0;
             padding: 0;
@@ -106,6 +113,14 @@
             left: -8px;
             top: 18px;
         }
+        .container{
+            alignment: center;
+            padding: 10px 10px 5px 10px;
+            margin: -10px 0px 20px 108px; width: 80%
+        }
+        .panel-info{
+            border-radius: 10px;
+        }
         .reply-link{
             margin-left: 86%;
         }
@@ -159,7 +174,7 @@
 </head>
 <body>
 <div id="app" style="margin-top: 60px;">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="height: 52px">
         <div class="container">
             <div class="navbar-header">
                 <!-- Collapsed Hamburger -->
