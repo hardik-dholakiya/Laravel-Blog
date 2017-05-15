@@ -119,7 +119,6 @@
                                                                  alt="Profile Avatar"/>
                                                         </a>
                                                         <p>{{$comment_detail["comment_text"]}}
-                                                            <br/>
                                                             <label class="reply-link">
                                                                 <a href="javascript:void(0)"
                                                                    class="btn btn-default btn-sm comment_reply"
@@ -139,7 +138,6 @@
                                                             <a href="{{url('show-user-profile/'.$reply_detail->user->id)}}">{{ $reply_detail->user->name }}</a>
                                                             <span>{{time_ago($reply_detail['created_at'])}}</span>
                                                         </div>
-
                                                         <a class="avatar"
                                                            href="{{url('show-user-profile/'.$reply_detail->user->id)}}">
                                                             <img src="{{asset($reply_detail->user->image)}}"

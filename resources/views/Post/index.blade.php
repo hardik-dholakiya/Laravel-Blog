@@ -129,7 +129,6 @@
                                                      alt="Profile Avatar"/>
                                             </a>
                                             <p>{{$comment_detail["comment_text"]}}
-                                                <br/>
                                                 <label class="reply-link">
                                                     <a href="javascript:void(0)"
                                                        class="btn btn-default btn-sm comment_reply"
