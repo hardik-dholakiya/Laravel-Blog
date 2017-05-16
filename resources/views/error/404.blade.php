@@ -11,7 +11,7 @@
                 {{--{{$error_message}}--}}
             </h4>
         {{--@else--}}
-            <img src="{{asset('image/404 error.jpg')}}"><br>
+            <img src="{{asset('image/404 page.jpg')}}"><br>
             <h3>Error file not found.!!!</h3>
         {{--@endif--}}
     </div>
