@@ -158,7 +158,9 @@
             padding: 10px 25px;
             margin-top: 18px;
         }
-
+        .description{
+            margin: 10px 0px 0px 14px;
+        }
 
         /* end comment reply*/
 

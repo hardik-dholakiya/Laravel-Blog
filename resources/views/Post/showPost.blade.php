@@ -41,11 +41,11 @@
                                      onerror="this.src='{{asset('image/no-image-icon.jpg')}}'" width="250px"
                                      height="200px">
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 description">
                                 {!! ucfirst($post_detail['description']) !!}
                             </div>
                         @else
-                            <div class="col-lg-offset-1">
+                            <div class="col-lg-offset-1 description">
                                 {!! ucfirst($post_detail['description']) !!}
                             </div>
                         @endif

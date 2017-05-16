@@ -42,7 +42,7 @@
                                          onerror="this.src='{{asset('image/no-image-icon.jpg')}}'" width="250px"
                                          height="200px">
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 description">
                                     {!! ucfirst(limit_text($post_detail['description'],50)) !!}
                                     <br/>
                                     <a href="{{ url('/showPost',$post_detail['post_id'])}}"
@@ -51,7 +51,7 @@
                                     </a>
                                 </div>
                             @else
-                                <div class="col-lg-offset-1">
+                                <div class="col-lg-offset-1 description ">
                                     {!! ucfirst(limit_text($post_detail['description'],50)) !!}
                                     <br/>
                                     <a href="{{ url('/showPost',$post_detail['post_id'])}}">
