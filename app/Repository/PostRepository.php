@@ -28,7 +28,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function getPostById($post_id)
     {
-        $post = Post::with(array('comments', 'comments.user', 'comments.reply', 'comments.reply.user'))->where('post_id',$post_id)->paginate(5);
+        $post = Post::with(array('comments', 'comments.user', 'comments.reply', 'comments.reply.user'))->where('post_id',$post_id)->first();
         return $post;
     }
 

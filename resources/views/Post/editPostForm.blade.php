@@ -71,7 +71,7 @@
                                 @if($post->image_path != null)
                                     <div class="form-group{{ $errors->has('image_path') ? ' has-error' : '' }}"><label
                                                 for="image" class="col-md-3 control-label">Selected image :-</label>
-                                        <div class="col-md-4">
+                                        <div class="col-md-5">
                                             <img src="{{asset($post->image_path)}}" id="image" height="200px"
                                                  width="300px"
                                                  onerror="this.src='{{asset('image/no-image-icon.jpg')}}'">

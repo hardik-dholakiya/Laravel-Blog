@@ -61,12 +61,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2 col-md-offset-3">
+                                    <span class="glyphicon glyphicon-user"></span>
                                     <strong>
                                         Post by
-                                        {{$post_detail['user']->name}}
+                                        <a href="{{url('show-user-profile/'.$post_detail['user']->id)}}">
+                                            {{$post_detail['user']->name}}
+                                        </a>
                                     </strong>
                                 </div>
-                                <div class="col-md-2" style="width: 95px;margin-left: -70px;">
+                                <div class="col-md-1">
                                     <a href="javascript:void(0)" class="btn btn-default like" id="like" name="like"
                                        data-post-id="{{$post_detail['post_id']}}" data-toggle="tooltip"
                                        data-placement="bottom">
@@ -83,19 +86,19 @@
                                     </form>
                                 </div>
 
-                                <div class="col-md-5" style="margin-left: -30px;">
+                                <div class="col-md-4 comment-link">
                                     <a class="btn btn-default" href="javascript:void(0)" data-toggle="modal"
                                        data-target="#CommentModal{{$post_detail['post_id']}}" title="Comment">
                                         <b>
                                             {{count($post_detail['Comments'])}} |
                                         </b>
-                                        <img src="{{asset('image/comment.png')}}" height="22px">
+                                        <img src="{{asset('image/comment.png')}}">
                                     </a>
 
                                 </div>
                                 <div class="col-md-2">
                                     <span class="glyphicon glyphicon-calendar"></span>
-                                    {{$post_detail['created_at']->format('d/m/y  h:i:s')}}
+                                    {{ time_ago($post_detail['created_at'])}}
                                 </div>
                             </div>
                             <!-- Modal -->
@@ -124,20 +127,48 @@
                                                                 <img src="{{asset($comment_detail->user->image)}}"
                                                                      onerror="this.src='{{asset('image/user-icon.png')}}'"
                                                                      height="30px"
-                                                                     title="{{$comment_detail->user->name}}" width="35"
+                                                                     title="{{$comment_detail->user->name}}"
+                                                                     width="35"
                                                                      alt="Profile Avatar"/>
                                                             </a>
-                                                            <p>{{$comment_detail["comment_text"]}}
+                                                            <p>{!! $comment_detail["comment_text"] !!}
                                                                 <label class="reply-link">
                                                                     <a href="javascript:void(0)"
-                                                                       class="btn btn-default btn-sm comment_reply"
-                                                                       id="click{{$comment_detail["comment_id"]}}"
-                                                                       data-comment-id="{{$comment_detail["comment_id"]}}"
-                                                                       data-post-id="{{$post_detail['post_id']}}">
+                                                                       data-toggle="collapse"
+                                                                       id="reply"
+                                                                       data-target="#reply-{{$comment_detail["comment_id"]}}"
+                                                                       class="btn btn-default btn-sm reply">
                                                                         <i class="fa fa-reply"></i> Reply
                                                                     </a>
                                                                 </label>
                                                             </p>
+                                                            <div id="reply-{{$comment_detail["comment_id"]}}"
+                                                                 class="collapse container reply-block" align="center">
+                                                                <div class="panel panel-info">
+                                                                    <div class="panel-heading">Reply</div>
+                                                                    <div class="panel-body">
+                                                                        <form action='{{route('storeReply')}}'
+                                                                              method='post'>
+                                                                            {{ csrf_field() }}
+                                                                            <textarea name='reply_text' required
+                                                                                      cols='90'
+                                                                                      rows='5'></textarea>
+                                                                            <input type='hidden' readonly name='user_id'
+                                                                                   value='{{Auth::user()->id}}'>
+                                                                            <input type='hidden' readonly name='post_id'
+                                                                                   value='{{$post_detail['post_id']}}'>
+                                                                            <input type='hidden' readonly
+                                                                                   name='comment_id'
+                                                                                   value='{{$comment_detail["comment_id"]}}'>
+                                                                            <button class='btn btn-default'
+                                                                                    type='submit'
+                                                                                    style="margin-top: -35px;"
+                                                                                    name='submit_reply'> Save Reply
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </li>
                                                         {{--end comment --}}
                                                     @endif
@@ -185,7 +216,6 @@
                                     </div>
                                 </div>
                             </div> <!--End Modal-->
-
                         </div>
                         <hr>
                     @endforeach
@@ -199,29 +229,10 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).on('click', '.comment_reply', function (e) {
-            $('.comment_reply').not(this).popover('hide');
-            $(this).popover(
-                {
-                    content: "<div><form action='{{route('storeReply')}}' method='post'>" + '{{ csrf_field() }}' +
-                    "<textarea name='reply_text' required cols='38' rows='6'></textarea>" +
-                    "<input type='hidden' readonly name='user_id' value='{{Auth::user()->id}}'>" +
-                    "<input type='hidden' readonly name='post_id' value='" + $(this).data('post-id') + "'>" +
-                    "<input type='hidden' readonly name='comment_id' value='" + $(this).data('comment-id') + "'>" +
-                    "<hr>" +
-                    "<button class='btn btn-default' type='submit' name='submit_reply'> Save Reply</button> &nbsp;&nbsp;" +
-                    "<input type='button' onclick='$(this).parent().parent().parent().parent().hide();' value='close' class='btn btn-default'></button>" +
-                    "</form></div>",
-                    title: "<h4>Reply</h4>",
-                    html: true,
-                    placement: "left"
-                });
-        });
-    </script>
 @endsection
 @section('head-include')
     <script type="text/javascript">
+
         $(document).ready(function () {
             $.ajaxSetup(
                 {
@@ -300,5 +311,4 @@ function time_ago($datetime, $full = false)
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
-
 ?>
