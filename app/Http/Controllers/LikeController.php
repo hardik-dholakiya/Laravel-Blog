@@ -18,7 +18,7 @@ class LikeController extends Controller
     {
         $data = $request->only('post_id');
         $data['user_id'] = Auth::user()->id;
-        $liked_total = $this->likeRepository->getByTotalLike($data['post_id'],$data['user_id']);
+        $liked_total = $this->likeRepository->getTotalLike($data['post_id'],$data['user_id']);
         if ($liked_total == 0) {
             $result = $this->likeRepository->likePost($data);
             if (!empty($result)) {

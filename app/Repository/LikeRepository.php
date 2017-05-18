@@ -12,7 +12,7 @@ class LikeRepository implements LikeRepositoryInterface
     {
         $this->like=$like;
     }
-    public function getByTotalLike($post_id,$user_id)
+    public function getTotalLike($post_id,$user_id)
     {
         $no_of_like=Like::where('post_id', $post_id)->where('user_id', $user_id)->count();
         return $no_of_like;
