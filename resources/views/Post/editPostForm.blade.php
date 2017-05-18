@@ -139,7 +139,7 @@
             });
             $('#removeImage').click(function () {
                 $('#image')
-                    .attr('src', '../image/no-image-icon.jpg');
+                    .attr('src', '{{asset('image/no-image-icon.jpg')}}');
                 $('#old_image').attr('value', '');
                 $('#new_image').attr('value', '');
             });
