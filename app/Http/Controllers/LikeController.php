@@ -3,29 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Like;
+use App\Repository\Interfaces\LikeRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
+    protected $likeRepository;
+    public function __construct(LikeRepositoryInterface $likeRepository)
+    {
+        $this->likeRepository=$likeRepository;
+    }
+
     public function storelike(Request $request)
     {
         $data = $request->only('post_id');
         $data['user_id'] = Auth::user()->id;
-        $liked_total = Like::where('post_id', $data['post_id'])->where('user_id', $data['user_id'])->count();
+        $liked_total = $this->likeRepository->getByTotalLike($data['post_id'],$data['user_id']);
         if ($liked_total == 0) {
-            $result = Like::create($data);
+            $result = $this->likeRepository->likePost($data);
             if (!empty($result)) {
-                return redirect()->route('home')->withErrors(['message' => ' Post is successfully Liked']);
+                return redirect()->back()->withErrors(['message' => ' Post is successfully Liked']);
             } else {
                 return redirect()->back()->withErrors(['message' => ' Post is not successfully like']);
             }
 
         } else {
-            $liked = Like::where('post_id', $data['post_id'])->where('user_id', $data['user_id'])->first();
-            $result = Like::where('id', $liked['id'])->delete();
+            $like_id = $this->likeRepository->getById($data['post_id'],$data['user_id']);
+            $result = $this->likeRepository->unlikePost($like_id['id']);
             if (!empty($result)) {
-                return redirect()->route('home')->withErrors(['message' => ' Post is successfully Unlike']);
+                return redirect()->back()->withErrors(['message' => ' Post is successfully Unlike']);
             } else {
                 return redirect()->back()->withErrors(['message' => ' Post is not successfully Unlike']);
             }
@@ -37,8 +44,7 @@ class LikeController extends Controller
     {
         $data = $request->all();
         $post_id = $data['post_id'];
-        $result = Like::with('user')->where('post_id', $post_id)->get();
-
+        $result = $this->likeRepository->getByPostId($post_id);
         foreach ($result as $key => $value) {
             $data[] = $value['user']['name'];
         }
