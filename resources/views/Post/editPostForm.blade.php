@@ -17,7 +17,7 @@
 @endsection
 
 @section('title')
-    Blog :: Edit post
+    Blog :: Edit Post Detail
 @endsection
 @section('content')
     <div class="container">
