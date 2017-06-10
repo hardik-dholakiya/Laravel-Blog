@@ -256,9 +256,7 @@
                     dataType: "json",
                     success: function (data) {
                         name = Object.values(data);
-                        $this.attr('title', name)
-                            .tooltip('fixTitle')
-                            .tooltip('show');
+                        $this.attr('title', name);
                     },
                     error: function (data) {
                         console.log("error");
