@@ -20,7 +20,7 @@
         }
 
         #searchText:focus {
-            width: 500px;
+            width: 400px;
             transition: 0.5s;
         }
         body{
@@ -164,6 +164,9 @@
 
         /* end comment reply*/
 
+        input[type=text]{
+            border-radius: 0px;
+        }
     </style>
     <!-- Scripts -->
     <script>
@@ -222,7 +225,7 @@
                                            placeholder="Search by title"
                                            name="search_text" required>
                                     <div class="input-group-btn">
-                                        <button class="btn btn-default form-control" type="submit">
+                                        <button class="btn btn-default form-control" type="submit" style="border: 0px solid #303030;">
                                             <i class="glyphicon glyphicon-search"></i>
                                         </button>
                                     </div>
