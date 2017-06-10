@@ -167,6 +167,9 @@
         input[type=text]{
             border-radius: 0px;
         }
+        .form-control {
+            border-radius: 0px;
+        }
     </style>
     <!-- Scripts -->
     <script>
