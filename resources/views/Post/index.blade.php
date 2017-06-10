@@ -29,6 +29,7 @@
                                     Edit
                                 </a>
                                 <a href="{{ url('/deletePost',$post_detail['post_id'])}}" class="btn btn-info"
+                                   onclick="return confirm('Do you really want to delete post?');"
                                    title="Delete Post">
                                     <span class="glyphicon glyphicon-trash"></span>
                                     Delete

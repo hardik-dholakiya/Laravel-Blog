@@ -21,7 +21,7 @@
                                 <strong>Error ! </strong> {{ $errors->first('message')}}.
                             </div>
                         @endif
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('updatePassword') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('updatePassword') }}"   onsubmit="return confirm('Do you really want to change password?');" >
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('oldPassword') ? ' has-error' : '' }}">

@@ -27,6 +27,7 @@
                     <div class="panel-heading" align="center"><h3>Edit Post</h3></div>
                     <div class="panel-body">
                         <form class="form-horizontal" role="form" method="POST" action="{{ route('editPost') }}"
+                              onsubmit="return confirm('Do you really want to submit edit post?');"
                               enctype="multipart/form-data">
                             {{ csrf_field() }}
                             @if ($errors->has('message'))
