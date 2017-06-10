@@ -255,7 +255,7 @@
                     },
                     dataType: "json",
                     success: function (data) {
-                        name = Object.values(data);
+                        name = Object.values(data).toString();
                         $this.attr('title', name);
                     },
                     error: function (data) {
