@@ -18,6 +18,10 @@ class ContactUsController extends Controller
                 'mime' => $file->getClientMimeType()
             ]);
         });
-        dd($result);
+        if ($result==null) {
+            return redirect()->route('home')->withErrors(['message' => 'Email is successfully send.']);
+        } else {
+            return redirect()->back()->withErrors(['message' => 'Email is not successfully send.']);
+        }
     }
 }
