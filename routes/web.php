@@ -48,10 +48,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/like', 'LikeController@storelike')->name('like');
     Route::post('/getLike', 'LikeController@getByPostId')->name('getLike');
 
+
+
     Route::get('/contact-us',function (){
             return view('contact-us');
     })->name('contact-us');
-
+    Route::post('/contact', 'ContactUsController@send_email')->name('contact');
 
 });
 
