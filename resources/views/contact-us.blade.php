@@ -12,7 +12,7 @@
                     <div class="panel-body">
 
                         <div class="contact-us-container ">
-                            <form action="{{route('contact')}}" method="post" enctype="multipart/form-data">
+                            <form action="{{route('contact')}}" method="post" enctype="multipart/form-data" name="myForm" id="myForm">
                                 {{ csrf_field() }}
                                 <label for="fname">First Name</label>
                                 <input type="text" id="fname" name="firstname" class="contact-us"
@@ -33,7 +33,8 @@
                                 </select>
 
                                 <label for="file">File</label>
-                                <input type="file" id="file" class="contact-us" name="file"
+                                <button name="addPet" class="btn" type="button" id="addPet">+</button>
+                                <input type="file" class="contact-us" name="file[]" id="file"
                                        placeholder="Your select file..">
 
                                 <label for="message">Message</label>
@@ -48,4 +49,17 @@
             </div>
         </div>
     </div>
+@endsection
+@section('body-include')
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#addPet").click(function () {
+                var addfile="<input type='file' class='contact-us' name='file[]' id='file'>";
+                $("#file").after(addfile);
+            });
+        });
+    </script>
 @endsection

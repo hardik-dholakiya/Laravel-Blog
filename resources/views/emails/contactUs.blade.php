@@ -21,7 +21,7 @@
             <td>{{$data['message']}}</td>
         </tr>
     </table>
-    <img src="{{$message-> embed($file->getRealPath())}}" width="100%" height="80%">
+{{--    <img src="{{$message-> embed($file[$i]->getRealPath())}}" width="100%" height="80%">--}}
 </div>
 
 <div align="center">

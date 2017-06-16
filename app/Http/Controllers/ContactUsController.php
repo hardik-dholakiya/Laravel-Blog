@@ -13,10 +13,14 @@ class ContactUsController extends Controller
         $data=$request->except('_token','file');
         $result=Mail::send('emails.contactUs', ['file' => $file,'data'=>$data], function ($m) use ($data,$file) {
             $m->to($data['email'], $data['firstname']." ".$data['lastname'])->subject('Contact for '.$data['subject'].".");
-            $m->attach($file->getPath(), [
-                'as' => $file->getClientOriginalName(),
-                'mime' => $file->getClientMimeType()
-            ]);
+
+            $size = sizeOf($file);
+            for ($i=0; $i < $size; $i++) {
+                $m->attach($file[$i]->getPath(), [
+                    'as' => $file[$i]->getClientOriginalName(),
+                    'mime' => $file[$i]->getClientMimeType()
+                ]);
+                }
         });
         if ($result==null) {
             return redirect()->route('home')->withErrors(['message' => 'Email is successfully send.']);
