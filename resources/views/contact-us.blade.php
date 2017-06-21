@@ -12,18 +12,19 @@
                     <div class="panel-body">
 
                         <div class="contact-us-container ">
-                            <form action="{{route('contact')}}" method="post" enctype="multipart/form-data" name="myForm" id="myForm">
+                            <form action="{{route('contact')}}" method="post" enctype="multipart/form-data"
+                                  name="myForm" id="myForm">
                                 {{ csrf_field() }}
-                                <label for="fname">First Name</label>
-                                <input type="text" id="fname" name="firstname" class="contact-us"
+                                <label for="fname">Name</label>
+                                <input type="text" id="name" name="name" class="contact-us"
                                        placeholder="Your name..">
 
-                                <label for="lname">Last Name</label>
-                                <input type="text" id="lname" class="contact-us" name="lastname"
-                                       placeholder="Your last name..">
+                                <label for="mobileNo">Mobile No</label>
+                                <input type="text" id="mobileNo" class="contact-us" name="mobileno"
+                                       placeholder="Your Mobile no..">
 
                                 <label for="email">Email</label>
-                                <input type="email" id="email" class="contact-us" name="email"
+                                <input type="text" id="email" class="contact-us" name="email"
                                        placeholder="Your select email..">
 
                                 <label for="subject">Subject</label>
@@ -32,9 +33,16 @@
                                     <option value="Feedback">Feedback</option>
                                 </select>
 
-                                <label for="file">File</label>
-                                <button name="addPet" class="btn" type="button" id="addPet">+</button>
-                                <input type="file" class="contact-us" name="file[]" id="file"
+                                <div class="col-lg-11" style="margin-left: -7px">
+                                    <label for="file">File</label>
+
+                                </div>
+                                <div class="col-lg-1">
+                                    <button name="addPet" class="btn" type="button" id="addPet">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </div>
+                                <input type="file" class="contact-us file" name="file[]" id="file"
                                        placeholder="Your select file..">
 
                                 <label for="message">Message</label>
@@ -49,6 +57,9 @@
             </div>
         </div>
     </div>
+
+
+
 @endsection
 @section('body-include')
 
@@ -57,7 +68,7 @@
     <script>
         $(document).ready(function () {
             $("#addPet").click(function () {
-                var addfile="<input type='file' class='contact-us' name='file[]' id='file'>";
+                var addfile = "<input type='file' class='contact-us' name='file[]' id='file'>";
                 $("#file").after(addfile);
             });
         });

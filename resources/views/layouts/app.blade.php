@@ -15,12 +15,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         #searchText {
-            width: 250px;
+            width: 230px;
             transition: 0.5s;
         }
 
         #searchText:focus {
-            width: 400px;
+            width: 330px;
             transition: 0.5s;
         }
         body{
@@ -247,7 +247,7 @@
                         <li><a href="{{ route('register') }}">Register</a></li>
                     @else
                         <li><a href="{{ route('contact-us') }}">Contact Us</a></li>
-                        <li class="dropdown">
+                        <li class="dropdown" style="margin-top: -6px;">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
                                 Wel-Come

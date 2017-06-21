@@ -1,6 +1,6 @@
 <h2 align="center">Welcome to Blog</h2>
 <div>
-    <h4>Welcome {{$data['firstname']." ".$data['lastname']}}</h4>
+    <h4>Welcome {{$data['name']}}</h4>
 </div>
 <div>
     <table border="1" cellpadding="10px">
@@ -10,6 +10,13 @@
                 {{$data['email']}}
             </td>
         </tr>
+        <tr>
+            <td>Mobile No:-</td>
+            <td>
+                {{$data['mobileno']}}
+            </td>
+        </tr>
+
         <tr>
             <td>subject:-</td>
             <td>

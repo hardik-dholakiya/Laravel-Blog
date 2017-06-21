@@ -1,6 +1,6 @@
 .contact-us{
     width: 100%;
-    padding: 12px;
+    padding: 7px;
     border: 1px solid;
     border-radius: 0px;
     box-sizing: border-box;
@@ -10,9 +10,12 @@
 }
 
 .contact-us-container {
-    border-radius: 5px;
+    border-radius: 0px;
     padding: 20px;
 }
 select{
     background-color: #fff;
 }
+
+
+

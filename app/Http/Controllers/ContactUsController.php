@@ -11,14 +11,16 @@ class ContactUsController extends Controller
     {
         $file=$request->file('file');
         $data=$request->except('_token','file');
-        $result=Mail::send('emails.contactUs', ['file' => $file,'data'=>$data], function ($m) use ($data,$file) {
-            $m->to($data['email'], $data['firstname']." ".$data['lastname'])->subject('Contact for '.$data['subject'].".");
-
+        $email[]=explode(',',$data["email"]);
+        $result=Mail::send('emails.contactUs', ['file' => $file,'data'=>$data], function ($m) use ($data,$email,$file) {
+            foreach ($email as $id=>$email_id) {
+                $m->to($email_id)->subject('Contact for ' . $data['subject'] . ".");
+            }
             $size = sizeOf($file);
             for ($i=0; $i < $size; $i++) {
-                $m->attach($file[$i]->getPath(), [
+                $m->attach($file[$i]->getRealPath(), [
                     'as' => $file[$i]->getClientOriginalName(),
-                    'mime' => $file[$i]->getClientMimeType()
+                    'mime' => $file[$i]->getMimeType()
                 ]);
                 }
         });
