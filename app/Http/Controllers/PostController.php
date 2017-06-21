@@ -4,8 +4,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Notifications\NewPostNotification;
 use App\Repository\Interfaces\PostRepositoryInterface;
 use Illuminate\Http\Request;
+use \Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -47,7 +49,7 @@ class PostController extends Controller
     {
         $update = $postRequest->all();
         $path = 'image/';
-
+        $user = Auth::user();
         if (isset($update['image'])) {
             $image_name = $update['image']->getClientOriginalName();
             $image_path = $postRequest->file('image')->move($path, $image_name);
@@ -55,10 +57,13 @@ class PostController extends Controller
             $image_path = "";
         }
 
-        $data = $postRequest->except('_token', 'image', 'submit_post');
+        $data = $postRequest->except('_token', 'image', 'submit_post', 'notify');
         $data['image_path'] = $image_path;
         $data['user_id'] = Auth::user()->id;
         $post = $this->postRepository->storePost($data);
+        if (isset($update['notify'])== true)
+            $user->notify(new NewPostNotification($post));
+//        Notification::send($user, new NewPostNotification($post));
         if (!empty($post)) {
             return redirect()->route('home')->withErrors(['message' => ' Post is successfully inserted.']);
         } else {
@@ -81,6 +86,7 @@ class PostController extends Controller
         $post = $this->postRepository->getPostById($post_id);
         return view('Post.showPost')->with("post", $post);
     }
+
     /**
      * search post by post title.
      */

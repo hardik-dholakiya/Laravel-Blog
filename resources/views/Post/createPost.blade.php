@@ -16,6 +16,79 @@
         });
     </script>
 
+    <style>
+        .funkycheckbox div {
+            clear: both;
+            overflow: hidden;
+        }
+
+        .funkycheckbox label {
+            width: 100%;
+            border-radius: 3px;
+            border: 1px solid #D1D3D4;
+            font-weight: normal;
+            border-radius: 0px;
+        }
+
+        .funkycheckbox input[type="checkbox"]:empty {
+            display: none;
+        }
+
+        .funkycheckbox input[type="checkbox"]:empty ~ label {
+            position: relative;
+            line-height: 2.5em;
+            text-indent: 3.25em;
+            margin-top: 2em;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .funkycheckbox input[type="checkbox"]:empty ~ label:before {
+            position: absolute;
+            display: block;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            content: '';
+            width: 2.5em;
+            background: #D1D3D4;
+            border-radius: 0px;
+        }
+
+        .funkycheckbox input[type="checkbox"]:hover:not(:checked) ~ label {
+            color: #888;
+        }
+
+        .funkycheckbox input[type="checkbox"]:hover:not(:checked) ~ label:before {
+            content: '\2714';
+            text-indent: .9em;
+            color: #C2C2C2;
+        }
+
+        .funkycheckbox input[type="checkbox"]:checked ~ label {
+            color: #777;
+        }
+
+        .funkycheckbox input[type="checkbox"]:checked ~ label:before {
+            content: '\2714';
+            text-indent: .9em;
+            color: #333;
+            background-color: #ccc;
+        }
+
+        .funkycheckbox input[type="checkbox"]:focus ~ label:before {
+            box-shadow: 0 0 0 3px #999;
+        }
+
+        .funkycheckbox-default input[type="checkbox"]:checked ~ label:before {
+            color: #333;
+            background-color: #ccc;
+        }
+
+    </style>
 
 @endsection
 @section('title')
@@ -61,7 +134,7 @@
                             </div>
                             <div class="form-group">
                                 <div class=" col-lg-offset-3 col-md-8">
-                                    <img id="selectedImage" name="selectedImage">
+                                    <img id="selectedImage" name="selectedImage" onerror="this.src='{{asset('image/no_image.png')}}'">
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
@@ -80,9 +153,19 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="publish" class="col-md-3 control-label">Post publish</label>
-                                <div class="col-md-1">
-                                    <input id="publish" value="1" type="checkbox" class="form-control" name="publish">
+                                <div class="col-md-8 col-md-offset-3">
+                                    {{--<input class="form-control" >--}}
+                                    <div class="funkycheckbox">
+                                        <div class="funkycheckbox-default">
+                                            <input type="checkbox" id="publish" value="1" name="publish" checked/>
+                                            <label for="publish">Post access all</label>
+                                        </div>
+                                        <div class="funkycheckbox-primary">
+                                            <input type="checkbox" name="notify" id="notify" checked/>
+                                            <label for="notify">Notify Post</label>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -108,18 +191,26 @@
 
         $(document).ready(function () {
             $('#image').change(function () {
-                if (this.files && this.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $('#selectedImage')
-                            .attr({
-                                    'src': e.target.result,
-                                    'width': '300px',
-                                    'height': '200px'
-                                }
-                            )
-                    };
-                    reader.readAsDataURL(this.files[0]);
+                $type=/[^.]+$/.exec(this.files[0]['name']);
+                if ($type=='jpg'|| $type=='png') {
+                    if (this.files && this.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#selectedImage')
+                                .attr({
+                                        'src': e.target.result,
+                                        'width': '300px',
+                                        'height': '200px'
+                                    }
+                                )
+                        };
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                }
+                else {
+                    alert("select only Image File...");
+                    $('#image').removeAttr('value');
+
                 }
             });
         });
