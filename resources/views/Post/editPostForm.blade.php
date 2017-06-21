@@ -98,10 +98,17 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="publish" class="col-md-3 control-label">Post publish</label>
-                                <div class="col-md-1">
-                                    <input id="publish" value="1" type="checkbox" class="form-control"
-                                           name="publish" {{ $post->publish==1?"checked":""}}>
+                                <div class="col-md-8 col-md-offset-3">
+                                    <div class="funkycheckbox">
+                                        <div class="funkycheckbox-default">
+                                            <input type="checkbox" id="publish" value="1" name="publish" {{ $post->publish==1?"checked":""}}/>
+                                            <label for="publish">Post view all</label>
+                                        </div>
+                                        <div class="funkycheckbox-primary">
+                                            <input type="checkbox" name="notify" id="notify" checked/>
+                                            <label for="notify">Notify Post</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -128,7 +135,9 @@
     <script>
         $(document).ready(function () {
             $('#new_image').change(function () {
-                if (this.files && this.files[0]) {
+                $type=/[^.]+$/.exec(this.files[0]['name']);
+                if ($type=='jpg'|| $type=='png') {
+                    if (this.files && this.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         $('#image')
@@ -136,7 +145,12 @@
                     };
                     reader.readAsDataURL(this.files[0]);
                 }
+                }
+                else {
+                    alert("select only Image File...");
+                    $('#image').removeAttr('value');
 
+                }
             });
             $('#removeImage').click(function () {
                 $('#image')

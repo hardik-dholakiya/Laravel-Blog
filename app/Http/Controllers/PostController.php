@@ -61,9 +61,11 @@ class PostController extends Controller
         $data['image_path'] = $image_path;
         $data['user_id'] = Auth::user()->id;
         $post = $this->postRepository->storePost($data);
-        if (isset($update['notify'])== true)
-            $user->notify(new NewPostNotification($post));
+        if (isset($update['notify'])== true) {
+            $msg = 'You Create now post.';
+            $user->notify(new NewPostNotification($post, $msg));
 //        Notification::send($user, new NewPostNotification($post));
+            }
         if (!empty($post)) {
             return redirect()->route('home')->withErrors(['message' => ' Post is successfully inserted.']);
         } else {

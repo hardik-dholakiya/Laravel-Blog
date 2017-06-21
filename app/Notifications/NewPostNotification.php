@@ -18,9 +18,11 @@ class NewPostNotification extends Notification
      * @return void
      */
     protected $post;
-    public function __construct($post)
+    protected $msg;
+    public function __construct($post,$msg)
     {
         $this->post=$post;
+        $this->msg=$msg;
     }
 
     /**
@@ -43,7 +45,7 @@ class NewPostNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('You Create now post.')
+                    ->line($this->msg)
                     ->line('Post Title is "'.$this->post->title.'"')
                     ->action('Click For view post', url('/').'/showPost/'.$this->post->post_id)
                     ->line('Thank you for using our application!');
